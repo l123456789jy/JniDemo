@@ -3,6 +3,7 @@ package com.example.jnidemo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +21,10 @@ public class MainActivity extends AppCompatActivity {
          TextView tv = findViewById(R.id.sample_text);
          tv.setText(callHai());
          callJavaMether();
-         startHttpRequest();
+        Persion persion = new Persion();
+        startHttpRequest(persion);
+        int speed = getLocation().speed;
+        Log.e("MainActivity", "speed: "+speed);
     }
 
     /**
@@ -29,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public native void callJavaMether();
     public native String callHai();
-    public native void startHttpRequest();
+    public native void startHttpRequest(Persion persion);
+
+    public native Location getLocation();
 
 }

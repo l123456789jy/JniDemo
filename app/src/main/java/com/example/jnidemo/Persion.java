@@ -8,4 +8,10 @@ public class Persion {
         Log.e("Persion", "setAge: "+age);
     }
 
+    public  void notifyCallback(Object msg){
+        Log.e("Persion", "notifyCallback: "+msg.toString());
+
+    }
+
+
 }

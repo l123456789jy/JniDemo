@@ -50,11 +50,45 @@ Java_com_example_jnidemo_MainActivity_callJavaMether(JNIEnv *env, jobject /* thi
 };
 
 
-
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_example_jnidemo_MainActivity_startHttpRequest(JNIEnv *env, jobject thiz) {
+Java_com_example_jnidemo_MainActivity_startHttpRequest(JNIEnv *env, jobject thiz, jobject persion) {
     HttpClient sync_client;
     JniTest jniTest;
+
+    // 获取方法 ID
+    jclass persionClass = env->GetObjectClass(persion);
+    jmethodID notifyCallbackMethodID = env->GetMethodID(persionClass, "notifyCallback", "(Ljava/lang/Object;)V");
+    // 创建 jstring 对象
+    jstring message = env->NewStringUTF("Hello from JNI!");
+    // 调用方法
+    env->CallVoidMethod(persion, notifyCallbackMethodID, message);
+    // 释放资源
+    env->DeleteLocalRef(message);
+    env->DeleteLocalRef(persionClass);
+
     jniTest.test_http_sync_client(&sync_client);
+}
+
+// 封装Java端对象
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_example_jnidemo_MainActivity_getLocation(JNIEnv *env, jobject thiz) {
+     // 获取 Location 类的 Class 对象
+    jclass locationClass = env->FindClass("com/example/jnidemo/Location");
+    // 获取 Location 类的构造函数
+    jmethodID constructorID = env->GetMethodID(locationClass, "<init>", "()V");
+    // 创建 Location 对象
+    jobject locationObject = env->NewObject(locationClass, constructorID);
+    // 获取 lat 字段 ID
+    jfieldID latFieldID = env->GetFieldID(locationClass, "lat", "Ljava/lang/String;");
+    // 获取 speed 字段 ID
+    jfieldID speedFieldID = env->GetFieldID(locationClass, "speed", "I");
+
+    jstring lat = env->NewStringUTF("11111");
+    // 设置 lat 字段值
+    env->SetObjectField(locationObject, latFieldID, lat);
+    // 设置 speed 字段值
+    env->SetIntField(locationObject, speedFieldID, 10);
+    return locationObject;
 }

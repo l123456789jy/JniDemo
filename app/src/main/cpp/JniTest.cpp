@@ -1,6 +1,3 @@
-//
-// Created by uidq4442 on 2024-5-9 0009.
-//
 
 
 #include "JniTest.h"
